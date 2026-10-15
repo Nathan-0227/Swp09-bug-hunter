@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug Hunter｜英文聽讀闖關</title>
+  <meta name="description" content="運用 Web Speech API 的資管英文跟讀闖關遊戲">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 class="logo">🐞 Bug Hunter <span>英文聽讀闖關</span></h1>
+    <div class="settings">
+      <label class="field">
+        <span>口音</span>
+        <select id="accentSelect">
+          <option value="en-US">🇺🇸 美式</option>
+          <option value="en-GB">🇬🇧 英式</option>
+        </select>
+      </label>
+      <div class="seg" role="group" aria-label="語速">
+        <button type="button" data-rate="1">正常</button>
+        <button type="button" data-rate="0.7">慢速</button>
+      </div>
+      <button type="button" id="soundToggle" class="icon-btn" title="音效開關">🔊</button>
+    </div>
+  </header>
+
+  <div id="unsupportedBanner" class="banner" hidden>
+    ⚠️ 你的瀏覽器不支援語音辨識（SpeechRecognition），目前只能聽發音、瀏覽題庫。
+    請改用 <b>電腦版 Chrome 或 Edge</b> 開啟才能闖關。
+  </div>
+
+  <main>
+    <!-- ============ 關卡選單 ============ -->
+    <section id="menu" class="view">
+      <div class="stats-bar">
+        <div class="stat">
+          <div class="stat-num" id="statAccuracy">--</div>
+          <div class="stat-label">總正確率</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="statTries">0</div>
+          <div class="stat-label">累計跟讀次數</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="statCorrect">0</div>
+          <div class="stat-label">念對次數</div>
+        </div>
+        <button type="button" id="resetBtn" class="ghost-btn">重設紀錄</button>
+      </div>
+      <p class="hint">點 🔊 聽正確發音。按「開始闖關」進入關卡跟讀，念對才能攻擊怪物！紅色「常錯」標記是你最常念錯的字。</p>
+      <div id="levelList" class="levels"></div>
+    </section>
+
+    <!-- ============ 遊戲畫面 ============ -->
+    <section id="game" class="view" hidden>
+      <div class="hud">
+        <button type="button" id="backBtn" class="ghost-btn">← 選單</button>
+        <div class="hud-title" id="hudTitle"></div>
+        <div class="hud-right">
+          <span id="hearts" class="hearts" aria-label="生命"></span>
+          <span class="score">分數 <b id="score">0</b></span>
+        </div>
+      </div>
+
+      <div class="arena">
+        <div class="monster-wrap">
+          <div id="monster" class="monster">🐛</div>
+          <div id="damage" class="damage"></div>
+        </div>
+        <div class="monster-name" id="monsterName"></div>
+        <div class="hp"><div id="hpFill" class="hp-fill"></div></div>
+        <div id="hpText" class="hp-text"></div>
+      </div>
+
+      <div id="combo" class="combo"></div>
+
+      <div class="timer"><div id="timerFill" class="timer-fill"></div></div>
+
+      <div class="card question">
+        <div class="q-mode" id="qMode"></div>
+        <div class="q-en" id="qEn"></div>
+        <div class="q-zh" id="qZh"></div>
+        <button type="button" id="qSpeak" class="icon-btn big" title="再聽一次">🔊</button>
+      </div>
+
+      <div class="mic-area">
+        <button type="button" id="micBtn" class="mic-btn" aria-label="開始錄音">🎤</button>
+        <div class="mic-hint">點麥克風或按 <kbd>空白鍵</kbd> 開始跟讀</div>
+        <div id="heard" class="heard"></div>
+        <div id="feedback" class="feedback"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 結算視窗 ============ -->
+  <div id="overlay" class="overlay" hidden>
+    <div class="modal">
+      <div class="modal-emoji" id="ovEmoji"></div>
+      <h2 id="ovTitle"></h2>
+      <div id="ovBody" class="modal-body"></div>
+      <div class="modal-actions" id="ovActions"></div>
+    </div>
+  </div>
+
+  <footer class="foot">SWP09 · 使用 Web Speech API（SpeechSynthesis + SpeechRecognition）</footer>
+
+  <script src="words.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
